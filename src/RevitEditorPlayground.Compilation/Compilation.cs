@@ -43,22 +43,18 @@ public static class CompliedCodeCreation
                             .WithContext(compilation);
                     })
                     .Map(input =>
-                    {
-                        var bytes = input.Value;
-                        var compilation = input.Context;
-                        return new CompiledCode(Bytes: bytes, Compilation: compilation);
-                    });
+                        CompiledCode.From(bytes: input.Value, compilation: input.Context)
+                    );
             }
             catch (Exception e)
             {
-                return Error.Failure(
-                    description: $"Unexpected failure during compilation: {e.Message}. {e.StackTrace}",
-                    metadata: new Dictionary<string, object>()
-                    {
-                        ["innerException"] = e.InnerException,
-                    }
-                );
+                return Error.UnexpectedCompilationFailure(e);
             }
+        }
+
+        private static CompiledCode From(IReadOnlyList<byte> bytes, CSharpCompilation compilation)
+        {
+            return new CompiledCode(Bytes: bytes, Compilation: compilation);
         }
     }
 }
