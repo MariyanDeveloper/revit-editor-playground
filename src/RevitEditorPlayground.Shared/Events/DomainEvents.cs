@@ -7,7 +7,8 @@ public static class DomainEvents
         public static DomainEvent TimelineDebug(
             string code,
             string message,
-            Dictionary<string, object>? metadata = null)
+            Dictionary<string, object>? metadata = null
+        )
         {
             return DomainEvent.Timeline(
                 code: code,
@@ -16,7 +17,7 @@ public static class DomainEvents
                 metadata: metadata
             );
         }
-        
+
         public static DomainEvent Timeline(
             string code,
             string message,
@@ -32,7 +33,7 @@ public static class DomainEvents
                 Metadata: metadata
             );
         }
-        
+
         public static DomainEvent Span(
             string code,
             string message,

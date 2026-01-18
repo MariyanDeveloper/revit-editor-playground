@@ -15,20 +15,20 @@ public static class FrameworkReferencesDiscovery
             var frameworkDirectory =
                 @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8";
 
-            return AbsolutePath.FromExistingDirectory(
-                    frameworkDirectory
-                )
+            return AbsolutePath
+                .FromExistingDirectory(frameworkDirectory)
                 .Map(path =>
                 {
-                    var references = Directory.EnumerateFiles(path, "*.dll", SearchOption.TopDirectoryOnly)
+                    var references = Directory
+                        .EnumerateFiles(path, "*.dll", SearchOption.TopDirectoryOnly)
                         .Where(IsManagedAssembly)
                         .Select(file => MetadataReference.CreateFromFile(file))
                         .ToList();
-                    
+
                     return new Framework(Version: FrameworkVersion.Net48, References: references);
                 });
         }
-        
+
         private static bool IsManagedAssembly(string path)
         {
             try
@@ -36,7 +36,8 @@ public static class FrameworkReferencesDiscovery
                 using var stream = File.OpenRead(path);
                 using var pe = new PEReader(stream);
 
-                if (!pe.HasMetadata) return false;
+                if (!pe.HasMetadata)
+                    return false;
 
                 // This ensures it’s CLR metadata, not just any metadata blob.
                 var reader = pe.GetMetadataReader();
@@ -47,6 +48,5 @@ public static class FrameworkReferencesDiscovery
                 return false;
             }
         }
-
     }
 }

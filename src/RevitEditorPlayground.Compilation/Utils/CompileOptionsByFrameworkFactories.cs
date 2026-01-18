@@ -32,17 +32,23 @@ public static class CompileOptionsByFrameworkFactories
             var discoveredFramework = frameworkVersion switch
             {
                 FrameworkVersion.Net48 => Framework.Net48(),
-                _ => throw new ArgumentOutOfRangeException(nameof(frameworkVersion), frameworkVersion, null)
+                _ => throw new ArgumentOutOfRangeException(
+                    nameof(frameworkVersion),
+                    frameworkVersion,
+                    null
+                ),
             };
 
-            return discoveredFramework.Map(framework => CompileOptions.From(
-                framework: framework,
-                languageVersion: languageVersion,
-                outputKind: outputKind,
-                emitOptions: emitOptions,
-                packages: packages,
-                globalUsings: globalUsings
-            ));
+            return discoveredFramework.Map(framework =>
+                CompileOptions.From(
+                    framework: framework,
+                    languageVersion: languageVersion,
+                    outputKind: outputKind,
+                    emitOptions: emitOptions,
+                    packages: packages,
+                    globalUsings: globalUsings
+                )
+            );
         }
 
         public static CompileOptions From(

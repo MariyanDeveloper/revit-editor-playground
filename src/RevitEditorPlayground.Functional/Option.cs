@@ -6,7 +6,7 @@ public static class Option
         new(value ?? throw new ArgumentNullException(nameof(value)));
 
     public static NoneType None => default;
-    
+
     public static Option<T> FromOptional<T>(T? value) => value is null ? None : Some(value);
 }
 

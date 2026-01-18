@@ -10,7 +10,7 @@ public static class RawCodebases
         {
             return new RawCodebase(Code: code);
         }
-        
+
         public static Result<RawCodebase> FromRawCode(string code)
         {
             return new RawCodebase(Code: [code]);
@@ -23,13 +23,14 @@ public static class RawCodebases
                 .Flatten()
                 .Select(file => file.Content)
                 .ToList();
-            
+
             return new RawCodebase(Code: codebase);
         }
-        
+
         public static Result<RawCodebase> FromSingleFile(string filePath)
         {
-            return CsharpFile.FromExistingFile(filePath)
+            return CsharpFile
+                .FromExistingFile(filePath)
                 .Map(csharpFile => new RawCodebase(Code: [csharpFile.Content]));
         }
     }

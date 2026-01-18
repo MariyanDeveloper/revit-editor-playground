@@ -14,7 +14,8 @@ public static class CompilationContexts
             LanguageVersion languageVersion = LanguageVersion.CSharp14
         )
         {
-            return CompileOptions.FromFrameworkVersion(
+            return CompileOptions
+                .FromFrameworkVersion(
                     frameworkVersion: frameworkVersion,
                     languageVersion: languageVersion
                 )
@@ -29,8 +30,7 @@ public static class CompilationContexts
                     return new CompilationContext(codebase, assemblyName, compileOptions);
                 });
         }
-        
-        
+
         public static Result<CompilationContext> FromRawCode(
             string[] code,
             string assemblyName,
@@ -38,7 +38,8 @@ public static class CompilationContexts
             LanguageVersion languageVersion = LanguageVersion.CSharp14
         )
         {
-            return CompileOptions.FromFrameworkVersion(
+            return CompileOptions
+                .FromFrameworkVersion(
                     frameworkVersion: frameworkVersion,
                     languageVersion: languageVersion
                 )
@@ -53,16 +54,16 @@ public static class CompilationContexts
                     return new CompilationContext(codebase, assemblyName, compileOptions);
                 });
         }
-        
-        
+
         public static Result<CompilationContext> FromCSharpFile(
             string csharpFilePath,
             string assemblyName,
             FrameworkVersion frameworkVersion,
-            LanguageVersion languageVersion = LanguageVersion.CSharp14 
+            LanguageVersion languageVersion = LanguageVersion.CSharp14
         )
         {
-            return CompileOptions.FromFrameworkVersion(
+            return CompileOptions
+                .FromFrameworkVersion(
                     frameworkVersion: frameworkVersion,
                     languageVersion: languageVersion
                 )

@@ -9,13 +9,17 @@ public static class CSharpSyntaxTreeParsing
 {
     extension(CSharpSyntaxTree)
     {
-        public static Result<IReadOnlyList<SyntaxTree>> ParseText(IReadOnlyList<string> codebase, CSharpParseOptions parseOptions,
-            IReadOnlyList<string> globalUsings)
+        public static Result<IReadOnlyList<SyntaxTree>> ParseText(
+            IReadOnlyList<string> codebase,
+            CSharpParseOptions parseOptions,
+            IReadOnlyList<string> globalUsings
+        )
         {
             try
             {
-                var syntaxTrees = codebase
-                    .Select(code => CSharpSyntaxTree.ParseText(code, parseOptions));
+                var syntaxTrees = codebase.Select(code =>
+                    CSharpSyntaxTree.ParseText(code, parseOptions)
+                );
 
                 if (!globalUsings.Any())
                 {
@@ -32,7 +36,9 @@ public static class CSharpSyntaxTreeParsing
             }
             catch (Exception e)
             {
-                return Error.Failure(description: $"Failed to parse syntax tree: {e.Message}. {e.StackTrace}");
+                return Error.Failure(
+                    description: $"Failed to parse syntax tree: {e.Message}. {e.StackTrace}"
+                );
             }
         }
     }

@@ -13,7 +13,10 @@ public static class Emitting
             try
             {
                 using var memoryStream = new MemoryStream();
-                var emitResult = compilation.Emit(peStream: memoryStream, options: emitOptions.InternalValue());
+                var emitResult = compilation.Emit(
+                    peStream: memoryStream,
+                    options: emitOptions.InternalValue()
+                );
 
                 if (!emitResult.Success)
                 {
@@ -21,7 +24,7 @@ public static class Emitting
                         description: "Failed compilation",
                         metadata: new Dictionary<string, object>
                         {
-                            ["diagnostics"] = emitResult.Diagnostics
+                            ["diagnostics"] = emitResult.Diagnostics,
                         }
                     );
                 }
@@ -32,7 +35,9 @@ public static class Emitting
             }
             catch (Exception e)
             {
-                return Error.Failure(description: $"Failed to emit compilation: {e.Message}. {e.StackTrace}");
+                return Error.Failure(
+                    description: $"Failed to emit compilation: {e.Message}. {e.StackTrace}"
+                );
             }
         }
     }

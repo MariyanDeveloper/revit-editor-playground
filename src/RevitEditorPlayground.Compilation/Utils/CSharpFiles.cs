@@ -5,12 +5,13 @@ namespace RevitEditorPlayground.Compilation.Utils;
 public static class CSharpFiles
 {
     private const string CsExtension = ".cs";
-    
+
     extension(CsharpFile)
     {
         public static Result<CsharpFile> FromExistingFile(string filePath)
         {
-            return Results.Ok(filePath)
+            return Results
+                .Ok(filePath)
                 .Then(static filePath =>
                 {
                     return Results.TryCatch(
@@ -18,14 +19,18 @@ public static class CSharpFiles
                         {
                             if (!File.Exists(filePath))
                             {
-                                return Error.Failure(description: $"File does not exist: {filePath}");
+                                return Error.Failure(
+                                    description: $"File does not exist: {filePath}"
+                                );
                             }
 
                             var extension = Path.GetExtension(filePath);
 
                             if (extension != CsExtension)
                             {
-                                return Error.Failure(description: $"File is not a C# file: {filePath}");
+                                return Error.Failure(
+                                    description: $"File is not a C# file: {filePath}"
+                                );
                             }
 
                             var text = File.ReadAllText(path: filePath);
@@ -34,9 +39,9 @@ public static class CSharpFiles
                         },
                         failure: exception =>
                             Error.Failure(
-                                description: $"Failed to read file: {exception.Message}. {exception.StackTrace}")
+                                description: $"Failed to read file: {exception.Message}. {exception.StackTrace}"
+                            )
                     );
-
                 });
         }
     }

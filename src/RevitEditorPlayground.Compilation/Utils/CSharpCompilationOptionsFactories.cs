@@ -11,10 +11,13 @@ public static class CSharpCompilationOptionsFactories
         {
             return new CSharpCompilationOptions(outputKind: OutputKind.DynamicallyLinkedLibrary);
         }
-        
+
         public static CSharpCompilationOptions Exe(string[]? usings = null)
         {
-            return new CSharpCompilationOptions(outputKind: OutputKind.ConsoleApplication, usings: usings);
+            return new CSharpCompilationOptions(
+                outputKind: OutputKind.ConsoleApplication,
+                usings: usings
+            );
         }
     }
 }

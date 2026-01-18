@@ -13,10 +13,16 @@ public static class Errors
             string description,
             string? code = null,
             Dictionary<string, object>? metadata = null,
-            List<Error>? innerErrors = null)
+            List<Error>? innerErrors = null
+        )
         {
-            return new Error(code ?? GenericCodes.GenericFailure, description, metadata, ErrorType.Failure, innerErrors ?? []);
+            return new Error(
+                code ?? GenericCodes.GenericFailure,
+                description,
+                metadata,
+                ErrorType.Failure,
+                innerErrors ?? []
+            );
         }
-        
     }
 }

@@ -18,7 +18,6 @@ public sealed record TimelineEvent(
     Dictionary<string, object>? Metadata
 ) : DomainEvent(Code, Message, Level);
 
-
 public sealed record SpanEvent(
     string Code,
     string Message,

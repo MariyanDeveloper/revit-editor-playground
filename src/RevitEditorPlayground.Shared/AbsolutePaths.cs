@@ -2,7 +2,6 @@
 
 namespace RevitEditorPlayground.Shared;
 
-
 public abstract record TypeAlias<T>(T Value)
 {
     public static implicit operator T(TypeAlias<T> alias)
@@ -26,6 +25,7 @@ public static class AbsolutePaths
 
             return new AbsolutePath(directory);
         }
+
         public static AbsolutePath FromCurrentDirectory(string fileName)
         {
             return new AbsolutePath(Path.Combine(Directory.GetCurrentDirectory(), fileName));
