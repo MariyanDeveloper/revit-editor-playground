@@ -36,9 +36,7 @@ public static class CSharpSyntaxTreeParsing
             }
             catch (Exception e)
             {
-                return Error.Failure(
-                    description: $"Failed to parse syntax tree: {e.Message}. {e.StackTrace}"
-                );
+                return Error.UnexpectedSyntaxTreeParsing(e);
             }
         }
     }
