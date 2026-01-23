@@ -1,4 +1,4 @@
-namespace Functional;
+namespace RevitEditorPlayground.Functional;
 
 public static class GenericCodes
 {
