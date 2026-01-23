@@ -1,4 +1,5 @@
-﻿using RevitEditorPlayground.Functional;
+﻿using Microsoft.CodeAnalysis;
+using RevitEditorPlayground.Functional;
 using RevitEditorPlayground.Shared.Errors;
 
 namespace RevitEditorPlayground.Execution.InProcess;
@@ -10,12 +11,25 @@ public static class ErrorCodes
     public const string UnexpectedExecutableDeletion = "UNEXPECTED_EXECUTABLE_DELETION";
     public const string FailedToStartProcess = "FAILED_TO_START_PROCESS";
     public const string UnexpectedFailureToStartProcess = "UNEXPECTED_FAILURE_TO_START_PROCESS";
+    public const string InvalidOutputKind = "INVALID_OUTPUT_KIND";
 }
 
 public static class Errors
 {
     extension(Error)
     {
+        public static Error InvalidOutputKind(OutputKind outputKind)
+        {
+            return Error.Failure(
+                code: ErrorCodes.InvalidOutputKind,
+                description: "Invalid output kind",
+                metadata: new Dictionary<string, object>()
+                {
+                    ["outputKind"] = outputKind
+                }
+            );
+        }
+        
         public static Error UnexpectedFailureToStartProcess(Exception exception, PhysicalExecutable physicalExecutable)
         {
             var metadata = Error.ExceptionMetadata(exception);

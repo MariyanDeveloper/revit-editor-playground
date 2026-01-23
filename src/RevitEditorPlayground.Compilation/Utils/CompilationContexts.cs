@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using RevitEditorPlayground.Functional;
 
 namespace RevitEditorPlayground.Compilation.Utils;
@@ -35,13 +36,15 @@ public static class CompilationContexts
             string[] code,
             string assemblyName,
             FrameworkVersion frameworkVersion,
-            LanguageVersion languageVersion = LanguageVersion.CSharp14
+            LanguageVersion languageVersion = LanguageVersion.CSharp14,
+            OutputKind outputKind = OutputKind.DynamicallyLinkedLibrary
         )
         {
             return CompileOptions
                 .FromFrameworkVersion(
                     frameworkVersion: frameworkVersion,
-                    languageVersion: languageVersion
+                    languageVersion: languageVersion,
+                    outputKind: outputKind
                 )
                 .ThenWithContext(_ => RawCodebase.FromRawCode(code))
                 .ThenWithContext(_ => AssemblyName.FromString(assemblyName))

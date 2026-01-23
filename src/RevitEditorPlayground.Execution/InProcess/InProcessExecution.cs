@@ -1,4 +1,5 @@
-﻿using RevitEditorPlayground.Compilation;
+﻿using Microsoft.CodeAnalysis;
+using RevitEditorPlayground.Compilation;
 using RevitEditorPlayground.Execution.InProcess.Utils;
 using RevitEditorPlayground.Functional;
 using RevitEditorPlayground.Shared.Events;
@@ -8,13 +9,19 @@ namespace RevitEditorPlayground.Execution.InProcess;
 public static class InProcessExecution
 {
     public static Result<InProcessExecutionOutput> Run(
-        RawCodebase codebase,
-        AssemblyName assemblyName,
-        CompileOptions compileOptions
-    )
+        InProcessExecutionContext context)
     {
         try
         {
+            var (executablePath, codebase, assemblyName, compileOptions) = context;
+            
+            var outputKind = compileOptions.CompilationOptions.OutputKind;
+
+            if (outputKind is not OutputKind.ConsoleApplication)
+            {
+                return Error.InvalidOutputKind(outputKind);
+            }
+            
             var events = new List<DomainEvent>();
             
             events.Add(DomainEvent.CompilationStarted(compileOptions, assemblyName));
@@ -29,8 +36,8 @@ public static class InProcessExecution
                     events.Add(DomainEvent.CompiledCode(compiledCode));
 
                     events.Add(DomainEvent.StartingExecutableCreation());
-
-                    return PhysicalExecutable.TemporaryFromCompiledCode(compiledCode)
+                    
+                    return PhysicalExecutable.FromOptionalPath(optionalPath: executablePath, compiledCode: compiledCode)
                         .WithContext(compiledCode);
                 })
                 .Then(input =>

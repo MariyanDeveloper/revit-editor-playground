@@ -8,7 +8,30 @@ public static class PhysicalExecutables
 {
     extension(PhysicalExecutable physicalExecutable)
     {
-        public static Result<PhysicalExecutable> TemporaryFromCompiledCode(CompiledCode compiledCode)
+        public static Result<PhysicalExecutable> FromOptionalPath(Option<AbsolutePath> optionalPath, CompiledCode compiledCode)
+        {
+            return optionalPath.Match(
+                some: path => PhysicalExecutable.FromPath(path, compiledCode),
+                none: () => PhysicalExecutable.RandomFromCurrentDirectory(compiledCode)
+            );
+        }
+        
+        public static Result<PhysicalExecutable> FromPath(AbsolutePath path, CompiledCode compiledCode)
+        {
+            try
+            {
+                File.WriteAllBytes(path, compiledCode.Bytes.ToArray());
+                
+                return new PhysicalExecutable(compiledCode.Bytes, path);
+                
+            }
+            catch (Exception e)
+            {
+                return Error.UnexpectedExecutableCreation(e);
+            }
+        }
+        
+        public static Result<PhysicalExecutable> RandomFromCurrentDirectory(CompiledCode compiledCode)
         {
             try
             {
@@ -26,7 +49,6 @@ public static class PhysicalExecutables
             {
                 return Error.UnexpectedExecutableCreation(e);
             }
-            
         }
 
         public Result<PhysicalExecutable> Delete()
