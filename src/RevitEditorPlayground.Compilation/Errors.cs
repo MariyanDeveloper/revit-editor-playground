@@ -1,6 +1,7 @@
-﻿using Functional;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Emit;
+using RevitEditorPlayground.Functional;
+using RevitEditorPlayground.Shared.Errors;
 
 namespace RevitEditorPlayground.Compilation;
 
@@ -60,17 +61,6 @@ public static class Errors
                 description: "Unexpected failure during compilation.",
                 metadata: Error.ExceptionMetadata(exception)
             );
-        }
-
-        private static Dictionary<string, object> ExceptionMetadata(Exception exception)
-        {
-            return new Dictionary<string, object>()
-            {
-                ["type"] = exception.GetType().Name,
-                ["message"] = exception.Message,
-                ["stackTrace"] = exception.StackTrace,
-                ["innerException"] = exception.InnerException,
-            };
         }
     }
 }

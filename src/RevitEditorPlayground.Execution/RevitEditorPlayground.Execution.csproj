@@ -4,4 +4,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RevitEditorPlayground.Compilation\RevitEditorPlayground.Compilation.csproj" />
+    <ProjectReference Include="..\RevitEditorPlayground.Functional\RevitEditorPlayground.Functional.csproj" />
+    <ProjectReference Include="..\RevitEditorPlayground.Shared\RevitEditorPlayground.Shared.csproj" />
+  </ItemGroup>
 </Project>

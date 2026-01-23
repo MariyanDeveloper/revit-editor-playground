@@ -1,7 +1,7 @@
-﻿using Functional;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
+using RevitEditorPlayground.Functional;
 using RevitEditorPlayground.Shared;
 
 namespace RevitEditorPlayground.Compilation;

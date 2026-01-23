@@ -1,4 +1,4 @@
-﻿namespace Functional;
+﻿namespace RevitEditorPlayground.Functional;
 
 public readonly struct Result<T>
 {

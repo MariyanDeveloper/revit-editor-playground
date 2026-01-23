@@ -1,4 +1,4 @@
-﻿namespace Functional;
+﻿namespace RevitEditorPlayground.Functional;
 
 public record Contextual<T, TContext>(T Value, TContext Context);
 
