@@ -16,6 +16,7 @@ public static class InProcessExecution
         try
         {
             var events = new List<DomainEvent>();
+            var errors = new List<Error>();
             
             var packages = options.Dependencies
                 .Select(dependency => MetadataReference.CreateFromFile(dependency.Path))
@@ -39,56 +40,67 @@ public static class InProcessExecution
                 })
                 .Then(compiledCode =>
                 {
-                    var executablePath = options.ExecutablePath;
-                    events.Add(DomainEvent.CompiledCode(compiledCode));
-
-                    events.Add(DomainEvent.StartingExecutableCreation());
+                    var workingDirectory = options.WorkingDirectory;
                     
-                    return PhysicalExecutable.FromOptionalPath(optionalPath: executablePath, compiledCode: compiledCode)
-                        .WithContext(compiledCode);
+                    var executableName = options.ExecutableName
+                        .OrElse(defaultValue:  ExecutableName.FromKnownString(
+                            name: $"main_{Guid.NewGuid().ToString()}.exe"
+                            ));
+                    
+                    events.Add(DomainEvent.CompilationEnded(compiledCode));
+
+                    events.Add(DomainEvent.StartingExecutableBundleCreation());
+
+                    return ExecutableBundle.From(
+                        code: compiledCode,
+                        workingDirectory: workingDirectory,
+                        executableName: executableName,
+                        dependencies: options.Dependencies
+                    ).WithContext(compiledCode);
+
                 })
                 .Then(input =>
                 {
                     var compiledCode = input.Context;
-                    var physicalExecutable = input.Value;
-                    events.Add(DomainEvent.CreatedExecutable(physicalExecutable));
+                    var executableBundle = input.Value;
+                    events.Add(DomainEvent.CreatedExecutableBundle(executableBundle));
 
-                    return System.Diagnostics.Process.StartExecutable(physicalExecutable)
-                        .WithContext((CompiledCode: compiledCode, PhysicalExecutable: physicalExecutable));
+                    return ExecutedProcess.RunFromBundle(executableBundle)
+                        .WithContext((compiledCode, executableBundle));
+
                 })
                 .Map(input =>
                 {
-                    var compiledCode = input.Context.CompiledCode;
-                    var physicalExecutable = input.Context.PhysicalExecutable;
-                    var process = input.Value;
+                    var (compiledCode, executableBundle) = input.Context;
+                    var executedProcess = input.Value;
+                    
+                    events.Add(DomainEvent.BundleExecutionEnded(executedProcess));
 
-                    events.Add(DomainEvent.ProcessStarted(process));
-                    var stdout = process.StandardOutput.ReadToEnd();
-                    var stderr = process.StandardError.ReadToEnd();
+                    var deletedExecutableBundleResult = executableBundle.Delete();
 
-                    process.WaitForExit();
+                    deletedExecutableBundleResult
+                        .Match(
+                            valid: deleted =>
+                            {
+                                events.Add(DomainEvent.ExecutableBundleDeleted(deleted));
+                            },
+                            invalid: error =>
+                            {
+                                errors.Add(error);
+                            }
+                        );
+                    
+                    return (compiledCode, executedProcess);
 
-                    events.Add(DomainEvent.ProcessExited(process));
-
-                    var outputs = (StandardOutput: stdout, StandardError: stderr);
-
-                    return outputs.WithContext((CompiledCode: compiledCode, PhysicalExecutable: physicalExecutable));
                 })
                 .Map(input =>
                 {
-                    var (compiledCode, physicalExecutable) = input.Context;
-                    var (standardOutput, standardError) = input.Value;
-
-                    physicalExecutable.Delete()
-                        .Do(deletedExecutable =>
-                        {
-                            events.Add(DomainEvent.ExecutableDeleted(deletedExecutable));
-                        });
+                    var (compiledCode, executedProcess) = input;
 
                     return new InProcessExecutionOutput(
                         CompiledCode: compiledCode,
-                        StandardOutput: standardOutput,
-                        StandardError: standardError,
+                        ExecutedProcess: executedProcess,
+                        Errors: errors,
                         Events: events
                     );
                 });

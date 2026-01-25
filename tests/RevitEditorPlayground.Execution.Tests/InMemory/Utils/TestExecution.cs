@@ -3,6 +3,7 @@ using RevitEditorPlayground.Compilation;
 using RevitEditorPlayground.Compilation.Utils;
 using RevitEditorPlayground.Execution.InMemory;
 using RevitEditorPlayground.Execution.InMemory.Utils;
+using RevitEditorPlayground.Execution.Shared;
 using RevitEditorPlayground.Execution.Tests.Utils;
 using RevitEditorPlayground.Functional;
 using RevitEditorPlayground.Shared;

@@ -1,8 +1,8 @@
 ﻿using RevitEditorPlayground.Shared;
 
-namespace RevitEditorPlayground.Execution.InMemory.Utils;
+namespace RevitEditorPlayground.Execution.Shared;
 
-public static class CompilationDependencyFactories
+public static class CompilationDependencies
 {
     extension(CompilationDependency)
     {

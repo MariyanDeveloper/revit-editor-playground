@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.CSharp;
 using RevitEditorPlayground.Compilation;
 using RevitEditorPlayground.Execution.Contracts;
+using RevitEditorPlayground.Execution.Shared;
 using RevitEditorPlayground.Functional;
 using RevitEditorPlayground.Shared;
 using RevitEditorPlayground.Shared.Events;
@@ -39,21 +40,4 @@ public record InMemoryExecutionOutput(
     ExecutedScript ExecutedScript,
     IReadOnlyList<DomainEvent> Events);
 
-
-public record ScriptDependency(string FullPath, string NameWithExtension);
-
-public record DllFile(string Value) : TypeAlias<string>(Value);
-
 public record BinaryScript(AbsolutePath Directory, DllFile Main, IReadOnlyList<DllFile> Dependencies);
-
-
-public enum DependencyKind
-{
-    ProvidedByHost,
-    CopyLocal
-}
-
-public record CompilationDependency(
-    AbsolutePath Path,
-    DependencyKind Kind
-    );

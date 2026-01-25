@@ -1,5 +1,5 @@
-﻿using Microsoft.CodeAnalysis;
-using RevitEditorPlayground.Functional;
+﻿using RevitEditorPlayground.Functional;
+using RevitEditorPlayground.Shared;
 using RevitEditorPlayground.Shared.Errors;
 
 namespace RevitEditorPlayground.Execution.InProcess;
@@ -11,29 +11,41 @@ public static class ErrorCodes
     public const string UnexpectedExecutableDeletion = "UNEXPECTED_EXECUTABLE_DELETION";
     public const string FailedToStartProcess = "FAILED_TO_START_PROCESS";
     public const string UnexpectedFailureToStartProcess = "UNEXPECTED_FAILURE_TO_START_PROCESS";
-    public const string InvalidOutputKind = "INVALID_OUTPUT_KIND";
+    public const string FailedToCreateExecutable = "FAILED_TO_CREATE_EXECUTABLE";
+    public const string FailedAwaitingProcessExit = "FAILED_AWAITING_PROCESS_EXIT";
 }
 
 public static class Errors
 {
     extension(Error)
     {
-        public static Error InvalidOutputKind(OutputKind outputKind)
+        public static Error FailedAwaitingProcessExit(Exception exception)
         {
             return Error.Failure(
-                code: ErrorCodes.InvalidOutputKind,
-                description: "Invalid output kind",
-                metadata: new Dictionary<string, object>()
-                {
-                    ["outputKind"] = outputKind
-                }
+                code: ErrorCodes.FailedAwaitingProcessExit,
+                description: "Failed to await process exit.",
+                metadata: Error.ExceptionMetadata(exception)
+            );
+        }
+
+        public static Error FailedToCreateExecutable(Exception exception, AbsolutePath workingDirectory,
+            ExecutableName executableName)
+        {
+            var metadata = Error.ExceptionMetadata(exception);
+            metadata.Add("workingDirectory", workingDirectory.Value);
+            metadata.Add("executableName", executableName.Value);
+            
+            return Error.Failure(
+                code: ErrorCodes.FailedToCreateExecutable,
+                description: "Failed to create executable",
+                metadata: metadata
             );
         }
         
-        public static Error UnexpectedFailureToStartProcess(Exception exception, PhysicalExecutable physicalExecutable)
+        public static Error UnexpectedFailureToStartProcess(Exception exception, Executable executable)
         {
             var metadata = Error.ExceptionMetadata(exception);
-            metadata.Add("fileName", physicalExecutable.Path.Value);
+            metadata.Add("path", executable.Path.Value);
             
             return Error.Failure(
                 code: ErrorCodes.UnexpectedFailureToStartProcess,
@@ -42,14 +54,14 @@ public static class Errors
             );
         }
         
-        public static Error FailedToStartProcess(PhysicalExecutable physicalExecutable)
+        public static Error FailedToStartProcess(Executable executable)
         {
             return Error.Failure(
                 code: ErrorCodes.FailedToStartProcess,
                 description: "Failed to start process",
                 metadata: new Dictionary<string, object>()
                 {
-                    ["fileName"] = physicalExecutable.Path.Value
+                    ["path"] = executable.Path.Value
                 }
             );
         }

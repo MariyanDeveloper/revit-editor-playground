@@ -21,6 +21,20 @@ public static class Results
             return Fail<T>(error);
         }
     }
+    
+    public static T TryCatch<T>(Func<T> func, Func<Exception, T> fallback)
+    {
+        try
+        {
+            var result = func();
+            return result;
+        }
+        catch (Exception e)
+        {
+            var result = fallback(e);
+            return result;
+        }
+    }
 
     public static Result<T> TryCatch<T>(Func<Result<T>> func, Func<Exception, Error> failure)
     {

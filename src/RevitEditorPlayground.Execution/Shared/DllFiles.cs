@@ -1,8 +1,9 @@
 ﻿using RevitEditorPlayground.Compilation;
+using RevitEditorPlayground.Execution.InMemory;
 using RevitEditorPlayground.Functional;
 using RevitEditorPlayground.Shared;
 
-namespace RevitEditorPlayground.Execution.InMemory.Utils;
+namespace RevitEditorPlayground.Execution.Shared;
 
 public static class DllFiles
 {
