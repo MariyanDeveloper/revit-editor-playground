@@ -7,21 +7,38 @@ using RevitEditorPlayground.Shared.Events;
 
 namespace RevitEditorPlayground.Execution.InProcess;
 
-public record PhysicalExecutable(
-    IReadOnlyList<byte> Bytes,
-    AbsolutePath Path);
+
+public record Executable(
+    AbsolutePath Path,
+    IReadOnlyList<byte> Bytes);
+
+
+public record ExecutableBundle(
+    Executable Executable,
+    IReadOnlyList<DllFile> Dependencies,
+    AbsolutePath WorkingDirectory);
+
+public record ExecutableName(string Value) : TypeAlias<string>(Value);
 
 public record InProcessExecutionOptions(
     AssemblyName AssemblyName,
     FrameworkVersion Framework,
     LanguageVersion LanguageVersion,
     IReadOnlyList<CompilationDependency> Dependencies,
-    Option<AbsolutePath> ExecutablePath
-    );
+    AbsolutePath WorkingDirectory,
+    Option<ExecutableName> ExecutableName);
 
+
+public record ExecutedProcess(
+    string Name,
+    int Id,
+    string StandardOutput,
+    string StandardError,
+    int ExitCode
+    );
 
 public record InProcessExecutionOutput(
     CompiledCode CompiledCode,
-    string StandardOutput,
-    string StandardError,
+    ExecutedProcess ExecutedProcess,
+    IReadOnlyList<Error> Errors,
     IReadOnlyList<DomainEvent> Events);

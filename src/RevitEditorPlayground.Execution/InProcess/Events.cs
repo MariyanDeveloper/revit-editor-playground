@@ -7,73 +7,48 @@ public static class Events
 {
     extension(DomainEvent)
     {
-        public static DomainEvent ExecutableDeleted(PhysicalExecutable physicalExecutable)
+        public static DomainEvent ExecutableBundleDeleted(ExecutableBundle executableBundle)
         {
             return DomainEvent.Timeline(
-                code: EventCodes.Timeline.ExecutableDeleted,
-                message: "Executable deleted",
+                code: EventCodes.Timeline.ExecutableBundleDeleted,
+                message: "Executable bundle deleted",
                 metadata: new Dictionary<string, object>()
                 {
-                    ["fileName"] = physicalExecutable.Path.Value
+                    ["fileName"] = executableBundle.WorkingDirectory.Value
                 }
             );
         }
-        public static DomainEvent ProcessExited(System.Diagnostics.Process process)
+        public static DomainEvent BundleExecutionEnded(ExecutedProcess process)
         {
             return DomainEvent.Timeline(
-                code: EventCodes.Timeline.ProcessExited,
-                message: "Process exited",
+                code: EventCodes.Timeline.BundleExecutionEnded,
+                message: "Bundle execution ended",
                 metadata: new Dictionary<string, object>()
                 {
                     ["processId"] = process.Id,
-                    ["processName"] = process.ProcessName,
+                    ["processName"] = process.Name,
                     ["exitCode"] = process.ExitCode
                 }
             );
         }
 
-        public static DomainEvent ProcessStarted(System.Diagnostics.Process process)
+        public static DomainEvent CreatedExecutableBundle(ExecutableBundle executableBundle)
         {
             return DomainEvent.Timeline(
-                code: EventCodes.Timeline.ProcessStarted,
-                message: "Process started",
+                code: EventCodes.Timeline.ExecutableBundleCreated,
+                message: "Executable bundle created",
                 metadata: new Dictionary<string, object>()
                 {
-                    ["processId"] = process.Id,
-                    ["processName"] = process.ProcessName
+                    ["fileName"] = executableBundle.WorkingDirectory.Value
                 }
             );
         }
 
-        public static DomainEvent StartingProcessCreation(PhysicalExecutable physicalExecutable)
+        public static DomainEvent StartingExecutableBundleCreation()
         {
             return DomainEvent.Timeline(
-                code: EventCodes.Timeline.ProcessCreationStarting,
-                message: "Starting process creation",
-                metadata: new Dictionary<string, object>()
-                {
-                    ["fileName"] = physicalExecutable.Path.Value
-                }
-            );
-        }
-
-        public static DomainEvent CreatedExecutable(PhysicalExecutable physicalExecutable)
-        {
-            return DomainEvent.Timeline(
-                code: EventCodes.Timeline.ExecutableCreated,
-                message: "Executable created",
-                metadata: new Dictionary<string, object>()
-                {
-                    ["fileName"] = physicalExecutable.Path.Value
-                }
-            );
-        }
-
-        public static DomainEvent StartingExecutableCreation()
-        {
-            return DomainEvent.Timeline(
-                code: EventCodes.Timeline.ExecutableCreationStarting,
-                message: "Starting executable creation"
+                code: EventCodes.Timeline.ExecutableBundleCreationStarting,
+                message: "Executable creation starting"
             );
         }
         public static DomainEvent CompilationStarted(CompileOptions compileOptions, string assemblyName)
@@ -89,12 +64,12 @@ public static class Events
             );
         }
 
-        public static DomainEvent CompiledCode(
+        public static DomainEvent CompilationEnded(
             CompiledCode compiledCode)
         {
             return DomainEvent.Timeline(
-                code: EventCodes.Timeline.CompiledCode,
-                message: "Compiled code",
+                code: EventCodes.Timeline.CompilationEnded,
+                message: "Compilation ended",
                 metadata: new Dictionary<string, object>()
                 {
                     ["compiledCode"] = compiledCode

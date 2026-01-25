@@ -16,6 +16,11 @@ public static class AbsolutePaths
 {
     extension(AbsolutePath absolutePath)
     {
+        public static AbsolutePath FromKnownFile(string filePath)
+        {
+            return new AbsolutePath(filePath);
+        }
+        
         public static Result<AbsolutePath> FromExistingFile(string filePath)
         {
             if (!File.Exists(filePath))

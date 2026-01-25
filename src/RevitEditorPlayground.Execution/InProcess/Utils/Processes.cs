@@ -7,7 +7,7 @@ public static class Processes
 {
     extension(Process)
     {
-        public static Result<Process> StartExecutable(PhysicalExecutable executable)
+        public static Result<Process> StartExecutable(Executable executable)
         {
             try
             {

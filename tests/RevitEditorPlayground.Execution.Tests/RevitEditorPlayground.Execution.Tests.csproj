@@ -31,6 +31,9 @@
     <None Update="InMemory\libs\net48\RevitEditorPlayground.Execution.Contracts.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="InProcess\libs\net45\Newtonsoft.Json.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
