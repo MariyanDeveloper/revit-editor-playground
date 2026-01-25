@@ -1,4 +1,6 @@
-﻿using RevitEditorPlayground.Compilation;
+﻿using Microsoft.CodeAnalysis.CSharp;
+using RevitEditorPlayground.Compilation;
+using RevitEditorPlayground.Execution.InMemory;
 using RevitEditorPlayground.Functional;
 using RevitEditorPlayground.Shared;
 using RevitEditorPlayground.Shared.Events;
@@ -9,12 +11,14 @@ public record PhysicalExecutable(
     IReadOnlyList<byte> Bytes,
     AbsolutePath Path);
 
-public record InProcessExecutionContext(
-    Option<AbsolutePath> ExecutablePath,
-    RawCodebase RawCodebase,
+public record InProcessExecutionOptions(
     AssemblyName AssemblyName,
-    CompileOptions CompileOptions
+    FrameworkVersion Framework,
+    LanguageVersion LanguageVersion,
+    IReadOnlyList<CompilationDependency> Dependencies,
+    Option<AbsolutePath> ExecutablePath
     );
+
 
 public record InProcessExecutionOutput(
     CompiledCode CompiledCode,
