@@ -40,7 +40,7 @@ public static class InMemoryExecution
                 {
                     var scriptDirectory = executionOptions.ScriptDirectory;
 
-                    return BinaryScript.From(scriptDirectory: scriptDirectory, compiledCode: compiledCode,
+                    return ScriptBundle.From(scriptDirectory: scriptDirectory, compiledCode: compiledCode,
                             dependencies: executionOptions.Dependencies)
                         .WithContext(compiledCode);
                 })

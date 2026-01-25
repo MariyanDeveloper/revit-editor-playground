@@ -40,4 +40,4 @@ public record InMemoryExecutionOutput(
     ExecutedScript ExecutedScript,
     IReadOnlyList<DomainEvent> Events);
 
-public record BinaryScript(AbsolutePath Directory, DllFile Main, IReadOnlyList<DllFile> Dependencies);
+public record ScriptBundle(AbsolutePath Directory, DllFile Main, IReadOnlyList<DllFile> Dependencies);
