@@ -7,6 +7,7 @@
     <Project Path="src/RevitEditorPlayground.Shared/RevitEditorPlayground.Shared.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/RevitEditorPlayground.ArchitectureTests/RevitEditorPlayground.ArchitectureTests.csproj" />
     <Project Path="tests/RevitEditorPlayground.Execution.Tests/RevitEditorPlayground.Execution.Tests.csproj" />
   </Folder>
 </Solution>
