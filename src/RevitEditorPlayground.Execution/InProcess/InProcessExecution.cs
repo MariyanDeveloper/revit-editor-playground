@@ -1,5 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using RevitEditorPlayground.Compilation;
+using RevitEditorPlayground.Compilation.Utils;
 using RevitEditorPlayground.Execution.InProcess.Utils;
 using RevitEditorPlayground.Functional;
 using RevitEditorPlayground.Shared.Events;
@@ -9,30 +10,36 @@ namespace RevitEditorPlayground.Execution.InProcess;
 public static class InProcessExecution
 {
     public static Result<InProcessExecutionOutput> Run(
-        InProcessExecutionContext context)
+        RawCodebase codebase,
+        InProcessExecutionOptions options)
     {
         try
         {
-            var (executablePath, codebase, assemblyName, compileOptions) = context;
-            
-            var outputKind = compileOptions.CompilationOptions.OutputKind;
-
-            if (outputKind is not OutputKind.ConsoleApplication)
-            {
-                return Error.InvalidOutputKind(outputKind);
-            }
-            
             var events = new List<DomainEvent>();
             
-            events.Add(DomainEvent.CompilationStarted(compileOptions, assemblyName));
+            var packages = options.Dependencies
+                .Select(dependency => MetadataReference.CreateFromFile(dependency.Path))
+                .ToList();
+            
+            return CompileOptions.FromFrameworkVersion(
+                frameworkVersion: options.Framework,
+                languageVersion: options.LanguageVersion,
+                packages: packages,
+                outputKind: OutputKind.ConsoleApplication)
+                .Then(compileOptions =>
+                {
+                    var assemblyName = options.AssemblyName;
+                    events.Add(DomainEvent.CompilationStarted(compileOptions, assemblyName));
 
-            return CompiledCode.FromCodebase(
-                    codebase: codebase,
-                    assemblyName: assemblyName,
-                    compileOptions: compileOptions
-                )
+                    return CompiledCode.FromCodebase(
+                        codebase: codebase,
+                        assemblyName: assemblyName,
+                        compileOptions: compileOptions
+                    );
+                })
                 .Then(compiledCode =>
                 {
+                    var executablePath = options.ExecutablePath;
                     events.Add(DomainEvent.CompiledCode(compiledCode));
 
                     events.Add(DomainEvent.StartingExecutableCreation());
@@ -85,6 +92,7 @@ public static class InProcessExecution
                         Events: events
                     );
                 });
+            
         }
         catch (Exception e)
         {

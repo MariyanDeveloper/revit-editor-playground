@@ -28,7 +28,7 @@ public class InProcessExecutionTests
 
         var output = InProcessExecution.RunRawCode(codebase);
         
-        var normalizedOutput = output.Normalize();
+        var normalizedOutput = output.SnapshotNormalized();
         
         InlineSnapshot.Validate(normalizedOutput, """
             {

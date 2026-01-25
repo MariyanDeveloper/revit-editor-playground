@@ -1,7 +1,8 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis.CSharp;
 using RevitEditorPlayground.Compilation;
 using RevitEditorPlayground.Compilation.Utils;
 using RevitEditorPlayground.Execution.InProcess;
+using RevitEditorPlayground.Execution.Tests.Utils;
 using RevitEditorPlayground.Functional;
 using Shouldly;
 
@@ -13,24 +14,16 @@ public static class InProcessExecutionTestsUtils
     {
         public static InProcessExecutionOutput RunRawCode(string code)
         {
-            var inProcessResult = CompilationContext.FromRawCode(
-                    code: [code],
-                    assemblyName: "MyApp",
-                    frameworkVersion: FrameworkVersion.Net48,
-                    outputKind: OutputKind.ConsoleApplication
-                )
-                .Then(static context =>
-                {
-                    var (codebase, assemblyName, compileOptions) = context;
-                
-                    var inProcessContext = new InProcessExecutionContext(
-                        RawCodebase: codebase,
-                        AssemblyName: assemblyName,
-                        CompileOptions: compileOptions,
-                        ExecutablePath: Option.None);
-                
-                    return InProcessExecution.Run(inProcessContext);
-                });
+            var options = new InProcessExecutionOptions(
+                AssemblyName: AssemblyName.FromString("MyApp").ShouldHaveValue(),
+                Framework: FrameworkVersion.Net48,
+                LanguageVersion: LanguageVersion.CSharp14,
+                Dependencies: [],
+                ExecutablePath: Option.None);
+            
+            var codebase = RawCodebase.FromRawCode(code).ShouldHaveValue();
+            
+            var inProcessResult = InProcessExecution.Run(codebase, options);
 
             inProcessResult.IsValid.ShouldBeTrue();
 
@@ -42,7 +35,7 @@ public static class InProcessExecutionTestsUtils
     
     extension(InProcessExecutionOutput output)
     {
-        public object Normalize()
+        public object SnapshotNormalized()
         {
             
             return new
