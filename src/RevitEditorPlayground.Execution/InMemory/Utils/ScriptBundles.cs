@@ -5,12 +5,12 @@ using RevitEditorPlayground.Shared;
 
 namespace RevitEditorPlayground.Execution.InMemory.Utils;
 
-public static class BinaryScripts
+public static class ScriptBundles
 {
-    extension(BinaryScript)
+    extension(ScriptBundle)
     {
 
-        public static Result<BinaryScript> From(
+        public static Result<ScriptBundle> From(
             AbsolutePath scriptDirectory,
             CompiledCode compiledCode,
             IReadOnlyList<CompilationDependency> dependencies
@@ -34,7 +34,7 @@ public static class BinaryScripts
                     var dependencyDlls = input.Value;
                     var mainDll = input.Context;
                     
-                    return new BinaryScript(Directory: scriptDirectory, Main: mainDll, Dependencies: dependencyDlls);
+                    return new ScriptBundle(Directory: scriptDirectory, Main: mainDll, Dependencies: dependencyDlls);
                 });
             
         }
