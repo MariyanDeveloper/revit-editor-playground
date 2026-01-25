@@ -10,6 +10,7 @@ namespace RevitEditorPlayground.ArchitectureTests.Execution;
 public class ExecutionModulesTests
 {
     private static Assembly ExecutionAssembly => typeof(InMemoryExecution).Assembly; 
+    
     [Fact]
     public void InMemory_ShouldNotDependOnInProcess()
     {
