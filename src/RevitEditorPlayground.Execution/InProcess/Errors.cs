@@ -1,5 +1,4 @@
-﻿using Microsoft.CodeAnalysis;
-using RevitEditorPlayground.Functional;
+﻿using RevitEditorPlayground.Functional;
 using RevitEditorPlayground.Shared;
 using RevitEditorPlayground.Shared.Errors;
 
