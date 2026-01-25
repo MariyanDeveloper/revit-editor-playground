@@ -14,8 +14,18 @@ public record AbsolutePath(string Value) : TypeAlias<string>(Value);
 
 public static class AbsolutePaths
 {
-    extension(AbsolutePath)
+    extension(AbsolutePath absolutePath)
     {
+        public static Result<AbsolutePath> FromExistingFile(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                return Error.Failure(description: $"File does not exist: {filePath}");
+            }
+
+            return new AbsolutePath(filePath);
+        }
+        
         public static Result<AbsolutePath> FromExistingDirectory(string directory)
         {
             if (!Directory.Exists(directory))
@@ -30,5 +40,13 @@ public static class AbsolutePaths
         {
             return new AbsolutePath(Path.Combine(Directory.GetCurrentDirectory(), fileName));
         }
+
+        public AbsolutePath Combine(string fileName)
+        {
+            var path = Path.Combine(absolutePath, fileName);
+            
+            return new AbsolutePath(path);
+        }
+        
     }
 }

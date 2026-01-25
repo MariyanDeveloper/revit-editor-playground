@@ -1,4 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net9.0;net48</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -6,4 +7,5 @@
     <LangVersion>14</LangVersion>
     <WarningsAsErrors>true</WarningsAsErrors>
   </PropertyGroup>
+
 </Project>

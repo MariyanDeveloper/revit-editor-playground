@@ -1,11 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+      <TargetFrameworks>netstandard2.0;net9.0;net48</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <LangVersion>14</LangVersion>
+    <WarningsAsErrors>true</WarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\RevitEditorPlayground.Compilation\RevitEditorPlayground.Compilation.csproj" />
+    <ProjectReference Include="..\RevitEditorPlayground.Execution.Contracts\RevitEditorPlayground.Execution.Contracts.csproj" />
     <ProjectReference Include="..\RevitEditorPlayground.Functional\RevitEditorPlayground.Functional.csproj" />
     <ProjectReference Include="..\RevitEditorPlayground.Shared\RevitEditorPlayground.Shared.csproj" />
   </ItemGroup>
