@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/RevitEditorPlayground.Compilation/RevitEditorPlayground.Compilation.csproj" />
+    <Project Path="src/RevitEditorPlayground.Execution.Contracts/RevitEditorPlayground.Execution.Contracts.csproj" />
     <Project Path="src/RevitEditorPlayground.Execution/RevitEditorPlayground.Execution.csproj" />
     <Project Path="src/RevitEditorPlayground.Functional/RevitEditorPlayground.Functional.csproj" />
     <Project Path="src/RevitEditorPlayground.Shared/RevitEditorPlayground.Shared.csproj" />

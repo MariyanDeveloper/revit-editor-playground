@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿#if NETCOREAPP
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Meziantou.Framework.InlineSnapshotTesting;
 using Meziantou.Framework.InlineSnapshotTesting.Serialization;
@@ -12,7 +13,7 @@ static class AssemblyInitializer
     {
         InlineSnapshotSettings.Default = InlineSnapshotSettings.Default with
         {
-            
+            SnapshotUpdateStrategy = SnapshotUpdateStrategy.Default,
             SnapshotSerializer = new JsonSnapshotSerializer(new JsonSerializerOptions(
                 new JsonSerializerOptions
                 {
@@ -24,3 +25,4 @@ static class AssemblyInitializer
         };
     }
 }
+#endif
